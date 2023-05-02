@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Info Write Form</title>
+        <style>
+            form > label {
+                display: inline-block;
+                width: 150px;
+            }
+            form > input {
+                padding: 4px;
+                margin-bottom: 4px;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        {% if user1 %}
+            <h1>Info Edit Form</h1>
+            <form action="./update/" method="POST" id="infoWriteForm">
+            <input type="hidden" name="idx" value="{{user1.id}}">
+        {% else %}
+            <h1>Info Write Form</h1>
+            <form action="http://localhost:8000/info/createInfo/" method="POST" id="infoWriteForm">
+        {% endif %}
+        {% csrf_token %} 
+            <label for="id">운송장 번호</label>
+            <input type="text" id="invoiceNo" name="invoiceNo" value="{{user1.invoiceNo}}" size="30" placeholder="운송장 번호" autocomplete="off">
+            <br>
+            <label for="id">제품명</label>
+            <input type="text" id="productName" name="productName" value="{{user1.productName}}" size="30" placeholder="이름을 입력하세요!" autocomplete="off">
+            <br>
+            <label for="id">수령인 성함</label>
+            <input type="text" id="receiverName" name="receiverName" value="{{user1.receiverName}}" size="30" placeholder="ex. 홍길동" autocomplete="off">
+            <br>
+            <label for="id">수령인 전화번호</label>
+            <input type="text" id="receiverPhone" name="receiverPhone" value="{{user1.receiverPhone}}" size="30" placeholder="ex. 010-1234-5678" autocomplete="off">
+            <br>
+            <label for="id">수령인 주소도시</label>
+            <input type="text" id="city" name="city" value="{{user1.city}}" size="30" placeholder="ex. 서울 특별시" autocomplete="off">
+            <br>
+            <label for="id">수령인 도로명주소</label>
+            <input type="text" id="street" name="street" value="{{user1.street}}" size="30" placeholder="ex. 필동로 1길 30" autocomplete="off">
+            <br>
+            <label for="id">수령인 상세주소</label>
+            <input type="text" id="details" name="details" value="{{user1.details}}" size="30" placeholder="ex. 신공학관 3169 강의실" autocomplete="off">
+            <br>
+            <label for="id">수령인 우편번호</label>
+            <input type="text" id="zipcode" name="zipcode" value="{{user1.zipcode}}" size="30" placeholder="ex. 06235" autocomplete="off">
+            <br>
+
+        </form>
+        {% if user1 %}
+            <button type="submit" form="infoWriteForm">정보수정</button>
+        {% else %}
+            <button type="submit" form="infoWriteForm">등록</button>
+        {% endif %}
+
+        <br><br>
+        <hr>
+        <div style = "padding-top: 10px;">
+            <ul style="line-height: 2em;">
+                {% for info in infos %}
+                <li>
+                    {{info.id}}. <b>{{info.invoiceNo}}</b>
+                    ({{info.productName}}) - {{info.receiverName}}
+                    {{info.receiverPhone}} -
+                    {{info.city}} -
+                    {{info.street}} - 
+                    {{info.details}} - 
+                    {{info.zipcode}} -
+                    가입일: {{info.date | date:'Y-m-d'}} 
+                    [<a href="./edit/{{info.id}}" style="font-weight: bold;">Edit</a>]
+                    [<a href="./delete/{{info.id}}" style="font-weight: bold;">Delete</a>]
+                </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+    </body>
+</html>
